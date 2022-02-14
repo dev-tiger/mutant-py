@@ -34,7 +34,10 @@ class MutantController:
     def stats():
         mutant_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant == True).scalar()
         human_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant == False).scalar()
-        ratio = mutant_count/human_count
+        if human_count != 0:
+            ratio = mutant_count/human_count
+        else:
+            ratio = f"{mutant_count}:{human_count} the ratio is undefined."
         return jsonify({'count_mutant_dna': mutant_count, 'count_human_dna': human_count, 'ratio': ratio})
 
 
