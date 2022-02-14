@@ -1,0 +1,6 @@
+flask
+apispec
+flask-sqlalchemy
+flask-marshmallow
+marshmallow-sqlalchemy
+python-dotenv
