@@ -1,19 +1,28 @@
 import os
 from flask import Flask
 
+import config
 from api.models import db
 from api.routes.mutant import mutant_api
+from api.routes.welcome import welcome
 
 
-def create_app():
+def create_app(testing_mode=False):
     app = Flask(__name__)
 
     # Se inicializa config a partir de fichero config y este a su vez de .env
-    app.config.from_object('config.Config')
+    if testing_mode is True:
+        app.config.from_object(config.ConfigTest)
+    else:
+        app.config.from_object(config.Config)
 
+    app.register_blueprint(welcome, url_prefix='/')
     app.register_blueprint(mutant_api, url_prefix='/api')
 
     db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
 
     return app
 

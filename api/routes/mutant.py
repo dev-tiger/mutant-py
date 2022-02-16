@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 
 from api.controllers.mutant import MutantController
 

@@ -1,36 +1,49 @@
-import os
-import datetime
 import json
-from unittest import TestCase
 
-from app import create_app
-from api.models import db
+from tests import BaseTest
 
 
-class TestMutant(TestCase):
-    def setUp(self):
-        self.app = create_app()
-        self.app.config['TESTING'] = True
-        self.app.config['WTF_CSRF_ENABLED'] = False
-        self.client = self.app.test_client()
-        # Crea un contexto de aplicación
-        with self.app.app_context():
-            # Crea las tablas de la base de datos
-            db.create_all()
+class TestMutant(BaseTest):
 
-    def tearDown(self):
-        with self.app.app_context():
-            # Elimina todas las tablas de la base de datos
-            db.session.remove()
-            db.drop_all()
+    dna_mutant = {"dna": ["ATGCGA", "CGGGGC", "TTGGGT", "AGAAGG", "CCTCTG", "ATTTTG"]}
+    dna_mutant2 = {"dna": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAAG", "CCTCTA", "ATTTTG"]}
+    dna_human = {"dna": ["ATGCGA", "CAGTGC", "TTGTGT", "AGAAAG", "CCTCTA", "TCACTG"]}
+    dna_human2 = {"dna": ["ATTCGA", "CAGTGC", "TTGTGT", "AGAAAG", "CCTCTA", "TCACTG"]}
 
-    def test_mutant(self):
-        post = self.app.post(
+    def test_is_mutant(self):
+        new_mutant = self.post_mutant(self.dna_mutant)
+        response_message = {"message": "A mutant has been added"}
+        self.assertEqual(200, new_mutant.status_code)
+        self.assertEqual(response_message, new_mutant.get_json())
+
+    def test_is_human(self):
+        new_human = self.post_mutant(self.dna_human)
+        response_message = {"message": "A human has been added"}
+        self.assertEqual(403, new_human.status_code)
+        self.assertEqual(response_message, new_human.get_json())
+
+    def test_dna_exist(self):
+        self.post_mutant(self.dna_mutant2)
+        new_register = self.post_mutant(self.dna_mutant2)
+        response_message = {"message": "DNA already exist"}
+        self.assertEqual(response_message, new_register.get_json())
+
+    def test_stats_void(self):
+        response = self.client.get('/api/stats')
+        self.assertEqual(200, response.status_code)
+
+    def tests_stats(self):
+        self.post_mutant(self.dna_human)
+        self.post_mutant(self.dna_mutant)
+        self.post_mutant(self.dna_human2)
+        response = self.client.get('/api/stats')
+        response_message = {"count_human_dna": 2, "count_mutant_dna": 1, "ratio": 0.5}
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response_message, response.get_json())
+
+    def post_mutant(self, dna):
+        return self.client.post(
             '/api/mutant',
-            data=json.dumps({"dna": ["ATGCGA", "CAGTGC", "TTGTGT", "AGAAAG", "CCTCTA", "TCACTG"]}),
+            data=json.dumps(dna),
             headers={'Content-Type': 'application/json'}
         )
-
-        response = {"message": "DNA already exist"}
-
-        self.assertEqual(response, post.get_json())

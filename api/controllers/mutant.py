@@ -32,8 +32,8 @@ class MutantController:
 
     @staticmethod
     def stats():
-        mutant_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant == True).scalar()
-        human_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant == False).scalar()
+        mutant_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant.is_(True)).scalar()
+        human_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant.is_(False)).scalar()
         if human_count != 0:
             ratio = mutant_count/human_count
         else:
@@ -57,13 +57,10 @@ def is_mutant(array):
         j = 0
         while j < len(array[i]):
             if vertical_check(array, i, j):
-                print(f"vertical posicion: [{i}, {j}]")
                 sequence += 1
             if horizontal_check(array, i, j):
-                print(f"horizontal posicion: [{i}, {j}]")
                 sequence += 1
             if oblique_check(array, i, j):
-                print(f"oblicuo posicion: [{i}, {j}]")
                 sequence += 1
             if sequence >= SEQUENCE_MUTANT:
                 return True
