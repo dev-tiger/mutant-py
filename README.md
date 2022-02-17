@@ -57,7 +57,9 @@ Después de estar dentro del entorno virtual, ejecutamos:
 ### Endpoints
 
 Mensaje de bienvenida -> GET: `http://localhost:5000/`
+
 Agregar registros DNA -> POST: `http://localhost:5000/api/mutant`
+
 Ver estadisticas -> GET: `http://localhost:5000/api/stats`
 
 ***Nota:*** _La especificación más detallada de cada endpoint,
