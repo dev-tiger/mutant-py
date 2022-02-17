@@ -14,6 +14,12 @@ class MutantController:
 
     @staticmethod
     def mutant():
+        """
+        Como cada secuencia DNA debe ser única en base de datos, se transforma toda la lista que llega en
+        una llave primaria (ya que se entiende que va a ser una secuencia única). Adicionalmente se aprovecha la ventaja
+        que tiene postgres almacenando arreglos, para no tener que hacer conversiones de tipo a la base de datos.
+        :return:
+        """
         data = request.get_json()
         id_dna = ''.join(data['dna'])
         if Dna.query.filter(Dna.id_dna == id_dna).first() is not None:
@@ -32,6 +38,10 @@ class MutantController:
 
     @staticmethod
     def stats():
+        """
+        Estadísticas
+        :return:
+        """
         mutant_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant.is_(True)).scalar()
         human_count = db.session.query(func.count(Dna.id_dna)).filter(Dna.mutant.is_(False)).scalar()
         if human_count != 0:
