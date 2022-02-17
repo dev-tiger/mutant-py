@@ -104,7 +104,7 @@ ____
 
 **Endpoint** -> `{dominio}/api/mutant`
 
-**Verbo** -> `GET`
+**Verbo** -> `POST`
 
 **Headers** -> `{ Content-Type = application/json }`
 
