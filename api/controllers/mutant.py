@@ -51,6 +51,15 @@ def list_to_matrix(array):
 
 
 def is_mutant(array):
+    """
+    Recorre el arreglo buscando secuencias mutantes, como a la final tiene que validar de alguna forma
+    todos los elementos de la matriz, se intenta evitar validaciones innecesarias, y la busqueda termina
+    cuando se hayan encontrado dos cadenas mutantes.
+    Como se hace un recorrido por matriz, hay validaciones que se van evitando, como verificar posiciones
+    anteriores, ya que se entiende que esas ya se hicieron con anticipación.
+    :param array:
+    :return:
+    """
     sequence = 0
     i = 0
     while i < len(array):
@@ -70,6 +79,14 @@ def is_mutant(array):
 
 
 def vertical_check(array, row, column):
+    """
+    Verifica desde una casilla de forma vertical si existe una secuencia mutante,
+    antes de validar si existe mutante, valida el alcance de casillas para no hacer validaciones innecesarias
+    :param array:
+    :param row: fila actual
+    :param column: columna actual
+    :return:
+    """
     if len(array) - 1 < row + 3:
         return False
     i = row + 1
@@ -81,6 +98,14 @@ def vertical_check(array, row, column):
 
 
 def horizontal_check(array, row, column):
+    """
+    Verifica desde una casilla de forma horizontal si existe una secuencia mutante,
+    antes de validar si existe mutante, valida el alcance de casillas para no hacer validaciones innecesarias
+    :param array:
+    :param row: fila actual
+    :param column: columna actual
+    :return:
+    """
     if len(array[row]) - 1 < column + 3:
         return False
     i = column + 1
@@ -92,6 +117,14 @@ def horizontal_check(array, row, column):
 
 
 def oblique_check(array, row, column):
+    """
+    Verifica desde una casilla de forma oblicua si existe una secuencia mutante,
+    antes de validar si existe mutante, valida el alcance de casillas para no hacer validaciones innecesarias
+    :param array:
+    :param row: fila actual
+    :param column: columna actual
+    :return:
+    """
     if len(array) - 1 < row + 3 or len(array[row]) - 1 < column + 3:
         return False
     i = row + 1
