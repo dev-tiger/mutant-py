@@ -89,7 +89,7 @@ Ejecutar en el siguiente orden:
 
 La API está expuesta en el siguiente dominio:
 
-http://mutant-balancer-402315165.us-west-2.elb.amazonaws.com
+http://mutant-auto-scaling-1-2096715179.us-east-1.elb.amazonaws.com/
 
 con la siguiente configuración de endpoints
 ___
